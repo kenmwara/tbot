@@ -58,12 +58,12 @@ The system records `eta_hours` at execute time (distance-to-SL / atr_per_hour) a
    ┌────────────────────────────────────────────────────────────┐
    │  PM2 process supervisor                                    │
    │                                                            │
-   │  st-bot-loop      ─→  Kalshi ST  (scan→predict→execute)   │
-   │  st-lt-loop       ─→  Kalshi LT  (scan→predict→execute)   │
-   │  st-forex-loop    ─→  OANDA FX   (scan→predict→execute)   │
-   │  st-stocks-loop   ─→  IBKR STK   (scan→predict→execute)   │
-   │  st-forex-resolver ─→  Closes FX positions when SL/TP hit │
-   │  st-dashboard     ─→  FastAPI · subscriber feed · UI      │
+   │  st-bot-loop      ─→  Kalshi ST  (scan→predict→execute)    │
+   │  st-lt-loop       ─→  Kalshi LT  (scan→predict→execute)    │
+   │  st-forex-loop    ─→  OANDA FX   (scan→predict→execute)    │
+   │  st-stocks-loop   ─→  IBKR STK   (scan→predict→execute)    │
+   │  st-forex-resolver ─→  Closes FX positions when SL/TP hit  │
+   │  st-dashboard     ─→  FastAPI · subscriber feed · UI       │
    │                                                            │
    │  Surface env isolation:  st.env  lt.env  fx.env  stk.env   │
    └────────────────────────────────────────────────────────────┘
