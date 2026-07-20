@@ -3,7 +3,7 @@
 > Production trading bot covering Kalshi prediction markets, OANDA forex, and IBKR equities. AI-driven prediction pipeline, signal-feed architecture for verbatim copy-trading, withdrawal-triggered commission model.
 
 🌐 **Live demo:** [tbot.trade/demo](https://tbot.trade/demo)
-📦 **Subscriber client:** [github.com/yourhandle/tbot-client](#) *(open source — runs locally on subscriber machines)*
+📦 **Subscriber client:** [github.com/kenmwara/tbot-client](https://github.com/kenmwara/tbot-client) *(open source — runs locally on subscriber machines)*
 🔒 **Operator-side bot:** private (strategy IP)
 
 ---
@@ -12,16 +12,16 @@
 
 T BOT is a four-surface automated trading system I built and run on a DigitalOcean droplet. It scans live markets, runs a multi-model AI prediction pipeline (Claude Sonnet + GPT-4o + Gemini ensemble for non-Kalshi surfaces), routes high-edge signals to brokers, and tracks calibration against realized outcomes.
 
-In private beta as a signal subscription service for friends — they self-fund their own broker accounts, my client runs locally on their machine, I never touch their funds. Commission is 15% on realized profits with withdrawal-triggered crystallization and a high-water mark.
+In private beta as a copy-trade pilot: subscribers connect their own Kalshi account by API key (stored encrypted, AES-GCM) and the engine mirrors operator trades at proportional size — subscribers keep custody of their own accounts and can revoke the key at any time. Commission is 15% on realized profits, billed via Stripe. (The earlier local-client signal-feed model lives on in tbot-client, superseded by the pilot.)
 
 ## The system at a glance
 
 | Surface | Broker | Strategy | Status |
 |---|---|---|---|
-| **Kalshi ST** | Kalshi | Short-term prediction markets (weather, crypto, sports) | Live |
-| **Kalshi LT** | Kalshi | Long-term political and macro events | Live |
-| **OANDA FX** | OANDA | 8 major currency pairs with ATR brackets | Live (cutover in progress) |
-| **IBKR STK** | Interactive Brokers | US equities via ibeam gateway | Live (funding in progress) |
+| **Kalshi ST** | Kalshi | Short-term weather markets — the real-money surface | Live |
+| **Kalshi LT** | Kalshi | Long-term macro events | Paper (validating) |
+| **OANDA FX** | OANDA | Currency pairs with ATR brackets | Retired 2026-06 (no measurable edge) |
+| **IBKR STK** | Interactive Brokers | US equities, long-only trend | Paper (benchmarked vs SPY) |
 
 **Operational footprint:** 6 PM2-managed processes on one Ubuntu droplet, FastAPI dashboard with subscriber feed API, append-only JSONL audit logs.
 
