@@ -86,17 +86,15 @@ See the [live deep-dive on tbot.trade/demo](https://tbot.trade/demo) for full AS
 
 ## Screenshots
 
-*Operator dashboard — per-surface allocations, P&L tracking, audit drawer, settings, subscriber aggregate panel.*
+<p>
+  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg" width="400" alt="tbot.trade operator dashboard — Portfolio Overview: one card per surface (ST live on Kalshi; FX, CRYPTO, LT, STK), health, and the labeled revenue projection">
+  &nbsp;&nbsp;
+  <img src="https://tbot.trade/portfolio/img/tbot-st.jpg" width="400" alt="tbot.trade ST surface page — bankroll mark-to-market, banked P&L, max drawdown, equity curve, positions, performance, Kalshi settlement resolver">
+  &nbsp;&nbsp;
+  <img src="https://tbot.trade/portfolio/img/tbot-demo.jpg" width="400" alt="tbot.trade/demo — the public product preview: algorithmic trading signals delivered to your phone, 15% on realized profit only, $0 custody">
+</p>
 
-[screenshot-1.png]
-
-*Live signal feed (operator side) — 4 surfaces, sub-strategy filters, edge/confidence per signal, dry-run vs live markers.*
-
-[screenshot-2.png]
-
-*Subscriber aggregate panel — operator view of aggregate performance across all subscribers, per-surface breakdown, no per-name attribution.*
-
-[screenshot-3.png]
+*Left — the operator dashboard: one card per surface, health, the labeled revenue projection. Middle — the ST surface: bankroll mark-to-market, banked P&L, drawdown, the settlement resolver. Right — the public demo at tbot.trade/demo. Real screens, real numbers — the dashboard shows the honest post-rebuild state.*
 
 ## Tech stack
 
