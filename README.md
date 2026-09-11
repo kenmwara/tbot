@@ -31,9 +31,9 @@ In private beta as a copy-trade pilot: subscribers connect their own Kalshi acco
 
 Each surface has its own env file, bankroll, position cap, daily-loss circuit breaker, and concentration cap. A losing streak on FX cannot drain the STK allocation. This isolation is the foundation that makes the rest of the architecture safe to iterate on.
 
-### 2. 10-gate risk chain
+### 2. 14-layer guard chain
 
-Every candidate signal traverses STOP-file check → dedup → per-market cap → direction filter → category suspension → risk validation → slippage check → minimum edge → minimum confidence → API cost cap. Most candidates are skipped — by design. The system is tuned for selectivity, not volume.
+Every candidate signal traverses a fourteen-layer chain before an order exists. The layers that reject most often: STOP-file check → dedup → per-market cap → direction filter → category suspension → risk validation → slippage check → minimum edge → minimum confidence → API cost cap. Most candidates are skipped — by design. The system is tuned for selectivity, not volume.
 
 ### 3. Multi-model AI ensemble (where applicable)
 
@@ -113,7 +113,7 @@ See the [live deep-dive on tbot.trade/demo](https://tbot.trade/demo) for full AS
 - 4 surfaces operational, multi-surface compound bankroll
 - Subscriber feed architecture: end-to-end verified on real subscriber client (polling → routing → callbacks → operator aggregation)
 - Demo page: edge-cached on Cloudflare globally
-- Calibration tooling: per-surface audit scripts with `--since` scoping, ETA calibration across all four surfaces
+- Calibration tooling: per-surface audit scripts with `--since` scoping, ETA calibration across every surface
 - Risk: zero subscriber-fund custody by design — operator never holds broker creds
 
 *Detailed performance metrics shared only with active beta subscribers via aggregate panel.*
