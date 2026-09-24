@@ -1,132 +1,107 @@
-# T BOT — multi-surface algorithmic trading system
+# T BOT — autonomous trading on Kalshi prediction markets
 
-> Production trading bot covering Kalshi prediction markets, OANDA forex, and IBKR equities. AI-driven prediction pipeline, signal-feed architecture for verbatim copy-trading, withdrawal-triggered commission model.
+> A live-money trading system that has to earn every lane it runs: a 14-layer risk guard chain, books reconciled to the exchange every night, and its own detection-and-response stack.
 
 🌐 **Live demo:** [tbot.trade/demo](https://tbot.trade/demo)
-📦 **Subscriber client:** [github.com/kenmwara/tbot-client](https://github.com/kenmwara/tbot-client) *(open source — runs locally on subscriber machines)*
+🛡️ **Security operations:** [github.com/kenmwara/tbot-security](https://github.com/kenmwara/tbot-security)
+📦 **Subscriber client:** [github.com/kenmwara/tbot-client](https://github.com/kenmwara/tbot-client) *(open source, the original signal-feed model)*
 🔒 **Operator-side bot:** private (strategy IP)
 
 ---
 
+## Screenshots
+
+<p>
+  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg" width="400" alt="tbot.trade operator dashboard: one card per surface, the live weather surface and the retired ones kept for scrutiny, health, and the labeled revenue projection">
+  &nbsp;&nbsp;
+  <img src="https://tbot.trade/portfolio/img/tbot-st.jpg" width="400" alt="tbot.trade ST surface page: bankroll mark-to-market, banked P&L, max drawdown, equity curve, positions, performance and the Kalshi settlement resolver">
+  &nbsp;&nbsp;
+  <img src="https://tbot.trade/portfolio/img/tbot-soar.jpg" width="400" alt="ops.tbot.trade/soar in demo mode: the security console with verdict, posture tiles, incident timeline and event feed">
+</p>
+
+*Left: the operator dashboard, one card per surface. Middle: the live weather surface, bankroll, P&L, drawdown and the settlement resolver. Right: the security console in its synthetic demo mode.*
+
 ## What this is
 
-T BOT is a four-surface automated trading system I built and run on a DigitalOcean droplet. It scans live markets, runs a multi-model AI prediction pipeline (Claude Sonnet + GPT-4o + Gemini ensemble for non-Kalshi surfaces), routes high-edge signals to brokers, and tracks calibration against realized outcomes.
+T BOT trades Kalshi prediction markets on its own, around the clock, from one Ubuntu droplet. The live surface is weather: daily temperature contracts across US cities, settled against the National Weather Service's own observations. I built it and run it alone.
 
-In private beta as a copy-trade pilot: subscribers connect their own Kalshi account by API key (stored encrypted, AES-GCM) and the engine mirrors operator trades at proportional size — subscribers keep custody of their own accounts and can revoke the key at any time. Commission is 15% on realized profits, billed via Stripe. (The earlier local-client signal-feed model lives on in tbot-client, superseded by the pilot.)
+It started wider. Forex (OANDA), macro events (Kalshi), US equities (IBKR) and crypto (Kraken) were each built, run on real or paper money, and measured. **None of them showed an edge that survived fees, so all four were retired on the evidence.** They stay on the dashboard so the decision can be re-examined, not forgotten.
 
-## The system at a glance
+A copy-trade pilot is in private beta: a subscriber connects their own Kalshi account by API key (encrypted at rest, AES-GCM, revocable at any time), and the engine mirrors the operator's trades at proportional size. The subscriber keeps custody. Commission is 15% of realised profit, billed through Stripe. The financial-services app listing is held for regulatory counsel rather than shipped and argued about later.
 
-| Surface | Broker | Strategy | Status |
+## The surfaces
+
+| Surface | Venue | What it trades | Status |
 |---|---|---|---|
-| **Kalshi ST** | Kalshi | Short-term weather markets — the real-money surface | Live |
-| **Kalshi LT** | Kalshi | Long-term macro events | Paper (validating) |
-| **OANDA FX** | OANDA | Currency pairs with ATR brackets | Retired 2026-06 (no measurable edge) |
-| **IBKR STK** | Interactive Brokers | US equities, long-only trend | Paper (benchmarked vs SPY) |
-
-**Operational footprint:** 6 PM2-managed processes on one Ubuntu droplet, FastAPI dashboard with subscriber feed API, append-only JSONL audit logs.
+| **ST weather** | Kalshi | Daily temperature contracts | **Live** |
+| LT macro | Kalshi | Longer-dated macro events | Retired 2026-09 (no edge) |
+| STK | IBKR | US equities, long-only trend | Retired 2026-09 (trailed buy-and-hold) |
+| CRYPTO | Kraken | Dip-buying | Retired 2026-09 (edge smaller than fees) |
+| FX | OANDA | Currency pairs | Retired 2026-06 (flat after 232 real trades) |
 
 ## What's interesting about it
 
-### 1. Surface-isolated risk
+### 1. A lane pays for itself, or it is recalibrated
 
-Each surface has its own env file, bankroll, position cap, daily-loss circuit breaker, and concentration cap. A losing streak on FX cannot drain the STK allocation. This isolation is the foundation that makes the rest of the architecture safe to iterate on.
+Every lane is billed nightly for its real exchange fees **plus the Claude spend that made its decisions**. When the bill exceeds the return, the lane is flagged for recalibration. The rule does not switch anything off by itself, because that is a risk decision a human makes. It is how a Claude-driven prediction lane was retired: measured against its own inference cost, it lost money. The model is only worth its price if the decisions it makes are.
 
-### 2. 14-layer guard chain
+### 2. A 14-layer guard chain
 
-Every candidate signal traverses a fourteen-layer chain before an order exists. The layers that reject most often: STOP-file check → dedup → per-market cap → direction filter → category suspension → risk validation → slippage check → minimum edge → minimum confidence → API cost cap. Most candidates are skipped — by design. The system is tuned for selectivity, not volume.
+Every candidate order passes fourteen sequential checks before it exists: leg-count limits, event-calendar blackouts, expiry proximity, slippage since the scan, a fee-aware edge gate with an overconfidence cap, confidence, signal strength, then the kill switch, open-position and exposure caps, and available capital at the moment of the order. Every layer is an environment variable, reversible without a deploy, and most candidates are refused. The system is tuned for selectivity, not volume.
 
-### 3. Multi-model AI ensemble (where applicable)
+### 3. Every knob is replayed before it ships
 
-Kalshi LT uses a weighted ensemble of Claude Sonnet 4.6 (primary), GPT-4o, Gemini 2.0, and DeepSeek for probability estimation. Disagreement between models is itself a signal — high model variance flags markets where the prediction is unreliable.
+A proposed change to a risk limit is first replayed against logged history and graded on real settlements, with the count, win rate and expected value reported. One proposed loosening would have opened 67 markets in a week at a net loss, so it was refused. A new edge starts at capped size with a scheduled verdict date. When a single bad weather reading once triggered a "certain" lock, the fix (two consecutive readings) was replayed first: it kept 59 calls with zero losses and refused 18, all of which would have won or were still pending.
 
-### 4. Subscriber feed architecture
+### 4. The books come from the exchange
 
-Signals are published to an append-only JSONL log served via `/api/signals/feed` (cursor-paginated, long-poll, 600s TTL). Subscribers run a Python client locally — they receive signals, apply their local size config, place orders on their own broker accounts, and POST `ack`/`executed`/`resolved` callbacks back to the operator. Operator sees aggregate performance only — no per-subscriber attribution.
+A nightly job pulls every fill, settlement, deposit and withdrawal from the exchange's own API, and the result has to close to the cash the exchange reports, within $5. Getting it to close taught three things the documentation had wrong: a NO purchase is reported as `action=sell, side=no`; there is no settlement fee (so two of the three in-repo fee estimators were off, one at half and one at 1.6×); and YES/NO pairs net into cash the moment they form. It also overturned an earlier documented lifetime figure. The exchange's number is the only one that counts now.
 
-### 5. Forward-only audit clarity
+### 5. Security is its own system
 
-Every resolved trade record carries a `resolution_source` tag (`kalshi_resolution`, `nws_observation`, `oanda_candles`, `ibkr_position`, `sim`) so audits can partition real vs synthetic data cleanly. Audit tools accept `--since YYYY-MM-DD` so post-cutover metrics aren't polluted by historical dry-run noise.
+Intrusion detection watches for unknown SSH keys, file changes, new ports, and, most usefully, **contracts filled on the exchange that the bot never logged**. That is how a misused API key would show, and it engages the kill switch automatically. Every event lands in a SIEM, a SOAR console holds the response playbooks, and a red team attacks the system from GitHub Actions every night. Full write-up: [tbot-security](https://github.com/kenmwara/tbot-security).
 
-### 6. ETA calibration
+### 6. Rebuildable by design
 
-The system records `eta_hours` at execute time (distance-to-SL / atr_per_hour) and compares against actual `resolved_at - timestamp` per surface. Surfaces a late-resolution bias when present — currently ST shows 42% late-resolution rate, informing whether daily-loss circuit-breakers are calibrated for the actual turnover speed.
+In August 2026 the droplet was destroyed with no snapshot. It was rebuilt from git and the secrets vault to live trading in one evening. Backups are now encrypted nightly and the restore is proven every night rather than assumed.
 
 ## Architecture
 
 ```
-                          DigitalOcean droplet (Ubuntu)
-   ┌────────────────────────────────────────────────────────────┐
-   │  PM2 process supervisor                                    │
-   │                                                            │
-   │  st-bot-loop      ─→  Kalshi ST  (scan→predict→execute)    │
-   │  st-lt-loop       ─→  Kalshi LT  (scan→predict→execute)    │
-   │  st-forex-loop    ─→  OANDA FX   (scan→predict→execute)    │
-   │  st-stocks-loop   ─→  IBKR STK   (scan→predict→execute)    │
-   │  st-forex-resolver ─→  Closes FX positions when SL/TP hit  │
-   │  st-dashboard     ─→  FastAPI · subscriber feed · UI       │
-   │                                                            │
-   │  Surface env isolation:  st.env  lt.env  fx.env  stk.env   │
-   └────────────────────────────────────────────────────────────┘
-                            │
-                            │  publishes to
-                            ▼
-   ┌────────────────────────────────────────────────────────────┐
-   │  /api/signals/feed     (long-poll, cursor-paginated)       │
-   │  /api/signals/{id}/ack         ←─┐                         │
-   │  /api/signals/{id}/executed    ←─┤  subscriber callbacks   │
-   │  /api/signals/{id}/resolved    ←─┘                         │
-   └────────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-                   N subscriber clients
-              (running locally — operator never sees broker creds)
+                         DigitalOcean droplet (Ubuntu)
+   ┌──────────────────────────────────────────────────────────────┐
+   │  st-bot-loop    scan → research → decide → guard → execute   │
+   │                 Kalshi weather, NWS observations              │
+   │  st-dashboard   FastAPI · operator UI · subscriber API        │
+   │  cron           settlement resolver · exchange books rebuild  │
+   │                 · lane economics · intrusion detection        │
+   │                 · encrypted backup · Morning Verify           │
+   └──────────────────────────────────────────────────────────────┘
+          │ events (signed)                    ▲ playbooks
+          ▼                                    │
+   ┌──────────────────────────────────────────────────────────────┐
+   │  Cloudflare: ingest worker → D1 event store (the SIEM)        │
+   │  read API → ops.tbot.trade (behind Access) · /soar console    │
+   └──────────────────────────────────────────────────────────────┘
 ```
-
-See the [live deep-dive on tbot.trade/demo](https://tbot.trade/demo) for full ASCII diagrams of the signal pipeline (scan → research → predict → decide → execute → publish → resolve) and the subscriber feed flow.
-
-## Screenshots
-
-<p>
-  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg" width="400" alt="tbot.trade operator dashboard — Portfolio Overview: one card per surface (ST live on Kalshi; FX, CRYPTO, LT, STK), health, and the labeled revenue projection">
-  &nbsp;&nbsp;
-  <img src="https://tbot.trade/portfolio/img/tbot-st.jpg" width="400" alt="tbot.trade ST surface page — bankroll mark-to-market, banked P&L, max drawdown, equity curve, positions, performance, Kalshi settlement resolver">
-  &nbsp;&nbsp;
-  <img src="https://tbot.trade/portfolio/img/tbot-demo.jpg" width="400" alt="tbot.trade/demo — the public product preview: algorithmic trading signals delivered to your phone, 15% on realized profit only, $0 custody">
-</p>
-
-*Left — the operator dashboard: one card per surface, health, the labeled revenue projection. Middle — the ST surface: bankroll mark-to-market, banked P&L, drawdown, the settlement resolver. Right — the public demo at tbot.trade/demo. Real screens, real numbers — the dashboard shows the honest post-rebuild state.*
 
 ## Tech stack
 
-- **Language:** Python 3.13
-- **Runtime:** Ubuntu 22.04, PM2 process supervisor
-- **Web:** FastAPI + Uvicorn
-- **Data:** Append-only JSONL logs (no DB — single-writer pattern with fcntl advisory locks)
-- **AI:** Anthropic Claude Sonnet 4.6 (primary), OpenAI GPT-4o, Google Gemini, DeepSeek
-- **Brokers:** Kalshi API, OANDA v20 API, Interactive Brokers via ibeam HTTP gateway
-- **External data:** NOAA NWS API (weather), Kalshi events/markets API
-- **Edge:** Cloudflare (DNS, edge caching, email routing)
-- **Frontend:** Vanilla HTML/CSS/JS — no framework
-
-## Results to date
-
-- 4 surfaces operational, multi-surface compound bankroll
-- Subscriber feed architecture: end-to-end verified on real subscriber client (polling → routing → callbacks → operator aggregation)
-- Demo page: edge-cached on Cloudflare globally
-- Calibration tooling: per-surface audit scripts with `--since` scoping, ETA calibration across every surface
-- Risk: zero subscriber-fund custody by design — operator never holds broker creds
-
-*Detailed performance metrics shared only with active beta subscribers via aggregate panel.*
+- **Language:** Python 3.13 (engine), TypeScript (Cloudflare Workers)
+- **Runtime:** Ubuntu, PM2, cron, nginx, UFW, fail2ban
+- **Web:** FastAPI + Uvicorn; vanilla HTML/CSS/JS
+- **Data:** append-only JSONL logs with advisory locks; Cloudflare D1 for events
+- **AI:** Anthropic Claude, measured per lane against its own cost
+- **Venues:** Kalshi (live); OANDA, IBKR and Kraken integrations built and retired
+- **External data:** NOAA / National Weather Service
+- **Delivery:** push to `main` → a CI gate (kill-switch tests, red-team self-check, secret scan) → deploy in about 40 seconds
 
 ## What I'd build next
 
-1. **Native subscriber app** (Tauri desktop + Capacitor mobile) — current client is Python CLI; works but won't scale past technical users
-2. **Strategy replay view** — "if you'd subscribed 30 days ago you'd have X" for prospective subscribers
-3. **More AI models in the ensemble** — currently Claude/GPT/Gemini/DeepSeek; adding more provides better disagreement signal
-4. **Surface expansion** — Polymarket (similar shape to Kalshi), commodities CFDs
+1. **A numeric forecast ensemble** (NBM, GEFS, ECMWF) calibrated on settlements, instead of a larger language model: the measured lever is forecast skill, not model size.
+2. **Market breadth**: more cities at capped size, so position size can grow without moving the price.
+3. **Strategy replay for prospective subscribers**: "if you had subscribed 30 days ago", from real fills.
 
-## License & status
+## Contact
 
-This is a private operational system. Code is not public. The [subscriber client](#) (the piece that runs on subscriber machines) is open source and lives in a separate repo — see linked above.
-
-If you're hiring and want to talk about the design decisions, I'm available — contact via [your-email].
+Code is private. The [subscriber client](https://github.com/kenmwara/tbot-client) is open source. If you are hiring and want to talk through the design decisions: [linkedin.com/in/kenmwara](https://linkedin.com/in/kenmwara).
