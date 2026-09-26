@@ -1,4 +1,4 @@
-# T BOT — autonomous trading on Kalshi prediction markets
+# T BOT — autonomous trading on prediction markets
 
 > A live-money trading system that has to earn every lane it runs: a 14-layer risk guard chain, books reconciled to the exchange every night, and its own detection-and-response stack.
 
@@ -12,29 +12,27 @@
 ## Screenshots
 
 <p>
-  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg?v=20260926" width="400" alt="T BOT surface roster: the live Kalshi weather surface, and LT, STK, CRYPTO, FX and the Claude lane retired on evidence with their reasons">
-  &nbsp;&nbsp;
-  <img src="https://tbot.trade/portfolio/img/tbot-st.jpg" width="400" alt="tbot.trade ST surface page: bankroll mark-to-market, banked P&L, max drawdown, equity curve, positions, performance and the Kalshi settlement resolver">
+  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg?v=20260926" width="400" alt="T BOT surface roster: the one live strategy, and LT, STK, CRYPTO, FX and the Claude lane retired on evidence with their reasons">
   &nbsp;&nbsp;
   <img src="https://tbot.trade/portfolio/img/tbot-soar.jpg" width="400" alt="ops.tbot.trade/soar in demo mode: the security console with verdict, posture tiles, incident timeline and event feed">
 </p>
 
-*Left: the operator dashboard, one card per surface. Middle: the live weather surface, bankroll, P&L, drawdown and the settlement resolver. Right: the security console in its synthetic demo mode.*
+*Left: the operator dashboard, one card per surface. Right: the security console in its synthetic demo mode.*
 
 ## What this is
 
-T BOT trades Kalshi prediction markets on its own, around the clock, from one Ubuntu droplet. The live surface is weather: daily temperature contracts across US cities, settled against the National Weather Service's own observations. I built it and run it alone.
+T BOT trades prediction markets on its own, around the clock, from one Ubuntu droplet. One rules-based strategy trades live; the method stays private.
 
-It started wider. Forex (OANDA), macro events (Kalshi), US equities (IBKR) and crypto (Kraken) were each built, run on real or paper money, and measured. **None of them showed an edge that survived fees, so all four were retired on the evidence.** They stay on the dashboard so the decision can be re-examined, not forgotten.
+It started wider. Forex (OANDA), macro events, US equities (IBKR) and crypto (Kraken) were each built, run on real or paper money, and measured. **None of them showed an edge that survived fees, so all four were retired on the evidence.** They stay on the dashboard so the decision can be re-examined, not forgotten.
 
-A copy-trade pilot is in private beta: a subscriber connects their own Kalshi account by API key (encrypted at rest, AES-GCM, revocable at any time), and the engine mirrors the operator's trades at proportional size. The subscriber keeps custody. Commission is 15% of realised profit, billed through Stripe. The financial-services app listing is held for regulatory counsel rather than shipped and argued about later.
+A copy-trade pilot is in private beta: a subscriber connects their own exchange account by API key (encrypted at rest, AES-GCM, revocable at any time), and the engine mirrors the operator's trades at proportional size. The subscriber keeps custody. Commission is 15% of realised profit, billed through Stripe. The financial-services app listing is held for regulatory counsel rather than shipped and argued about later.
 
 ## The surfaces
 
 | Surface | Venue | What it trades | Status |
 |---|---|---|---|
-| **ST weather** | Kalshi | Daily temperature contracts | **Live** |
-| LT macro | Kalshi | Longer-dated macro events | Retired 2026-09 (no edge) |
+| **ST** | Prediction markets | Short-dated event contracts | **Live** |
+| LT macro | Prediction markets | Longer-dated macro events | Retired 2026-09 (no edge) |
 | STK | IBKR | US equities, long-only trend | Retired 2026-09 (trailed buy-and-hold) |
 | CRYPTO | Kraken | Dip-buying | Retired 2026-09 (edge smaller than fees) |
 | FX | OANDA | Currency pairs | Retired 2026-06 (flat after 232 real trades) |
@@ -51,11 +49,11 @@ Every candidate order passes fourteen sequential checks before it exists: leg-co
 
 ### 3. Every knob is replayed before it ships
 
-A proposed change to a risk limit is first replayed against logged history and graded on real settlements, with the count, win rate and expected value reported. One proposed loosening would have opened 67 markets in a week at a net loss, so it was refused. A new edge starts at capped size with a scheduled verdict date. When a single bad weather reading once triggered a "certain" lock, the fix (two consecutive readings) was replayed first: it kept 59 calls with zero losses and refused 18, all of which would have won or were still pending.
+A proposed change to a risk limit is first replayed against logged history and graded on real settlements, with the count, win rate and expected value reported. One proposed loosening would have opened 67 markets in a week at a net loss, so it was refused. A new edge starts at capped size with a scheduled verdict date. When a single bad data reading once triggered a "certain" lock, the fix (two consecutive readings) was replayed first: it kept 59 calls with zero losses and refused 18, all of which would have won or were still pending.
 
 ### 4. The books come from the exchange
 
-A nightly job pulls every fill, settlement, deposit and withdrawal from the exchange's own API, and the result has to close to the cash the exchange reports, within $5. Getting it to close taught three things the documentation had wrong: a NO purchase is reported as `action=sell, side=no`; there is no settlement fee (so two of the three in-repo fee estimators were off, one at half and one at 1.6×); and YES/NO pairs net into cash the moment they form. It also overturned an earlier documented lifetime figure. The exchange's number is the only one that counts now.
+A nightly job pulls every fill, settlement, deposit and withdrawal from the exchange's own API, and the result has to close to the cash the exchange reports, within $5. Getting it to close taught three things the documentation had wrong: some purchases are reported under a different action than the one placed; there is no settlement fee (so two of the three in-repo fee estimators were off, one at half and one at 1.6×); and YES/NO pairs net into cash the moment they form. It also overturned an earlier documented lifetime figure. The exchange's number is the only one that counts now.
 
 ### 5. Security is its own system
 
@@ -71,7 +69,6 @@ In August 2026 the droplet was destroyed with no snapshot. It was rebuilt from g
                          DigitalOcean droplet (Ubuntu)
    ┌──────────────────────────────────────────────────────────────┐
    │  st-bot-loop    scan → research → decide → guard → execute   │
-   │                 Kalshi weather, NWS observations              │
    │  st-dashboard   FastAPI · operator UI · subscriber API        │
    │  cron           settlement resolver · exchange books rebuild  │
    │                 · lane economics · intrusion detection        │
@@ -92,8 +89,7 @@ In August 2026 the droplet was destroyed with no snapshot. It was rebuilt from g
 - **Web:** FastAPI + Uvicorn; vanilla HTML/CSS/JS
 - **Data:** append-only JSONL logs with advisory locks; Cloudflare D1 for events
 - **AI:** Anthropic Claude, measured per lane against its own cost
-- **Venues:** Kalshi (live); OANDA, IBKR and Kraken integrations built and retired
-- **External data:** NOAA / National Weather Service
+- **Venues:** one prediction-market exchange (live); OANDA, IBKR and Kraken integrations built and retired
 - **Delivery:** push to `main` → a CI gate (kill-switch tests, red-team self-check, secret scan) → deploy in about 40 seconds
 
 ## What I'd build next
