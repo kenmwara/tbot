@@ -12,7 +12,7 @@
 ## Screenshots
 
 <p>
-  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg" width="400" alt="tbot.trade operator dashboard: one card per surface, the live weather surface and the retired ones kept for scrutiny, health, and the labeled revenue projection">
+  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg?v=20260926" width="400" alt="T BOT surface roster: the live Kalshi weather surface, and LT, STK, CRYPTO, FX and the Claude lane retired on evidence with their reasons">
   &nbsp;&nbsp;
   <img src="https://tbot.trade/portfolio/img/tbot-st.jpg" width="400" alt="tbot.trade ST surface page: bankroll mark-to-market, banked P&L, max drawdown, equity curve, positions, performance and the Kalshi settlement resolver">
   &nbsp;&nbsp;
