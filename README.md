@@ -12,12 +12,12 @@
 ## Screenshots
 
 <p>
-  <img src="https://tbot.trade/portfolio/img/tbot-dash.jpg?v=20260926" width="400" alt="T BOT surface roster: the one live strategy, and LT, STK, CRYPTO, FX and the Claude lane retired on evidence with their reasons">
+  <a href="https://tbot.trade/demo"><img src="https://tbot.trade/portfolio/img/tbot-demo-card.png" width="400" alt="tbot.trade/demo: the real T BOT operator dashboard running on synthetic data: one live strategy and the retired lanes with their reasons"></a>
   &nbsp;&nbsp;
   <img src="https://tbot.trade/portfolio/img/tbot-soar.jpg" width="400" alt="ops.tbot.trade/soar in demo mode: the security console with verdict, posture tiles, incident timeline and event feed">
 </p>
 
-*Left: the operator dashboard, one card per surface. Right: the security console in its synthetic demo mode.*
+*Left: the real operator dashboard, live at tbot.trade/demo on synthetic data. Right: the security console in its synthetic demo mode.*
 
 ## What this is
 
