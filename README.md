@@ -12,7 +12,7 @@
 ## Screenshots
 
 <p>
-  <a href="https://tbot.trade/demo"><img src="https://tbot.trade/portfolio/img/tbot-demo-card.png" width="400" alt="tbot.trade/demo: the real T BOT operator dashboard running on synthetic data: one live strategy and the retired lanes with their reasons"></a>
+  <a href="https://tbot.trade/demo"><img src="https://tbot.trade/portfolio/img/tbot-demo-card.png?v=2" width="400" alt="tbot.trade/demo: the real T BOT operator dashboard running on synthetic data"></a>
   &nbsp;&nbsp;
   <img src="https://tbot.trade/portfolio/img/tbot-soar.jpg" width="400" alt="ops.tbot.trade/soar in demo mode: the security console with verdict, posture tiles, incident timeline and event feed">
 </p>
@@ -23,25 +23,15 @@
 
 T BOT trades prediction markets on its own, around the clock, from one Ubuntu droplet. One rules-based strategy trades live; the method stays private.
 
-It started wider. Forex (OANDA), macro events, US equities (IBKR) and crypto (Kraken) were each built, run on real or paper money, and measured. **None of them showed an edge that survived fees, so all four were retired on the evidence.** They stay on the dashboard so the decision can be re-examined, not forgotten.
+It is built as a multi-lane platform: forex (OANDA), US equities (IBKR), crypto (Kraken) and longer-dated macro events each have a working integration in the same engine and their own row on the dashboard. **A lane goes live only when its record, net of fees and AI spend, earns it**, so capital sits where the evidence is.
 
 A copy-trade pilot is in private beta: a subscriber connects their own exchange account by API key (encrypted at rest, AES-GCM, revocable at any time), and the engine mirrors the operator's trades at proportional size. The subscriber keeps custody. Commission is 15% of realised profit, billed through Stripe. The financial-services app listing is held for regulatory counsel rather than shipped and argued about later.
-
-## The surfaces
-
-| Surface | Venue | What it trades | Status |
-|---|---|---|---|
-| **ST** | Prediction markets | Short-dated event contracts | **Live** |
-| LT macro | Prediction markets | Longer-dated macro events | Retired 2026-09 (no edge) |
-| STK | IBKR | US equities, long-only trend | Retired 2026-09 (trailed buy-and-hold) |
-| CRYPTO | Kraken | Dip-buying | Retired 2026-09 (edge smaller than fees) |
-| FX | OANDA | Currency pairs | Retired 2026-06 (flat after 232 real trades) |
 
 ## What's interesting about it
 
 ### 1. A lane pays for itself, or it is recalibrated
 
-Every lane is billed nightly for its real exchange fees **plus the Claude spend that made its decisions**. When the bill exceeds the return, the lane is flagged for recalibration. The rule does not switch anything off by itself, because that is a risk decision a human makes. It is how a Claude-driven prediction lane was retired: measured against its own inference cost, it lost money. The model is only worth its price if the decisions it makes are.
+Every lane is billed nightly for its real exchange fees **plus the Claude spend that made its decisions**. When the bill exceeds the return, the lane is flagged for recalibration. The rule does not switch anything off by itself, because that is a risk decision a human makes. An AI-driven lane is measured against its own inference cost like any other: the model is only worth its price if the decisions it makes are.
 
 ### 2. A 14-layer guard chain
 
@@ -89,13 +79,13 @@ In August 2026 the droplet was destroyed with no snapshot. It was rebuilt from g
 - **Web:** FastAPI + Uvicorn; vanilla HTML/CSS/JS
 - **Data:** append-only JSONL logs with advisory locks; Cloudflare D1 for events
 - **AI:** Anthropic Claude, measured per lane against its own cost
-- **Venues:** one prediction-market exchange (live); OANDA, IBKR and Kraken integrations built and retired
+- **Venues:** one prediction-market exchange (live); OANDA, IBKR and Kraken integrations built into the same engine
 - **Delivery:** push to `main` → a CI gate (kill-switch tests, red-team self-check, secret scan) → deploy in about 40 seconds
 
 ## What I'd build next
 
-1. **A numeric forecast ensemble** (NBM, GEFS, ECMWF) calibrated on settlements, instead of a larger language model: the measured lever is forecast skill, not model size.
-2. **Market breadth**: more cities at capped size, so position size can grow without moving the price.
+1. **A calibrated numeric forecast ensemble** graded on settlements, instead of a larger language model: the measured lever is forecast skill, not model size.
+2. **Market breadth**: more markets at capped size, so position size can grow without moving the price.
 3. **Strategy replay for prospective subscribers**: "if you had subscribed 30 days ago", from real fills.
 
 ## Contact
