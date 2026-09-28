@@ -19,6 +19,12 @@
 
 *Left: the real operator dashboard, live at tbot.trade/demo on synthetic data. Right: the security console in its synthetic demo mode.*
 
+<p>
+  <a href="https://github.com/kenmwara/tbot-security"><img src="https://raw.githubusercontent.com/kenmwara/tbot-security/main/docs/soar-map.png" width="820" alt="SOAR attack map: 24 hours of traffic the server refused, by country, with the SSH, firewall, web and fail2ban split and the top network per country (real counts, no addresses)"></a>
+</p>
+
+*The console's attack map with real counts: 24 hours of traffic the server refused, by country. No addresses are shown, and countries come from an offline table on the server.*
+
 ## What this is
 
 T BOT trades prediction markets on its own, around the clock, from one Ubuntu droplet. One rules-based strategy trades live; the method stays private.
