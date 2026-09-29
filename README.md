@@ -1,6 +1,6 @@
 # T BOT — autonomous trading on prediction markets
 
-> A live-money trading system that has to earn every lane it runs: a 14-layer risk guard chain, books reconciled to the exchange every night, and its own detection-and-response stack.
+> A live-money trading system that has to earn every lane it runs: 17 logged risk gates, books reconciled to the exchange every night, and its own detection-and-response stack.
 
 🌐 **Live demo:** [tbot.trade/demo](https://tbot.trade/demo)
 🛡️ **Security operations:** [github.com/kenmwara/tbot-security](https://github.com/kenmwara/tbot-security)
@@ -39,9 +39,9 @@ A copy-trade pilot is in private beta: a subscriber connects their own exchange 
 
 Every lane is billed nightly for its real exchange fees **plus the Claude spend that made its decisions**. When the bill exceeds the return, the lane is flagged for recalibration. The rule does not switch anything off by itself, because that is a risk decision a human makes. An AI-driven lane is measured against its own inference cost like any other: the model is only worth its price if the decisions it makes are.
 
-### 2. A 14-layer guard chain
+### 2. Seventeen risk gates, every refusal logged
 
-Every candidate order passes fourteen sequential checks before it exists: leg-count limits, event-calendar blackouts, expiry proximity, slippage since the scan, a fee-aware edge gate with an overconfidence cap, confidence, signal strength, then the kill switch, open-position and exposure caps, and available capital at the moment of the order. Every layer is an environment variable, reversible without a deploy, and most candidates are refused. The system is tuned for selectivity, not volume.
+Every candidate market passes seventeen gates before an order exists: the market type and timing, spread and volume, a city blacklist, never touching another lane's position, checks on station-verified outcomes, per-cycle, open-position and pool exposure caps, a robust-Kelly sizing floor, a fee-aware EV check and an exposure ladder the strategy has to earn. Each refusal is written to a shadow log with the gate's name, so how often each gate fires is measured, not claimed. The gate list in the docs is generated from the code, and a gate added without a description fails the deploy. Placement adds its own breakers on top: the kill switch, a daily-loss halt and a cash guard. Most candidates are refused. The system is tuned for selectivity, not volume.
 
 ### 3. Every knob is replayed before it ships
 
