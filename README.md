@@ -1,3 +1,5 @@
+<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=cd39ed53" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
+
 # T BOT — autonomous trading platform
 
 > A live-money trading system that has to earn every lane it runs: 17 logged risk gates, books reconciled to the exchange every night, and its own detection-and-response stack.
