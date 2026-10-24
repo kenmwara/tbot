@@ -1,4 +1,4 @@
-<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=cd39ed53" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
+<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=0c4d71f0" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
 
 # T BOT — autonomous trading platform
 
