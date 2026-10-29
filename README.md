@@ -2,7 +2,7 @@
 
 # T BOT — autonomous trading platform
 
-> A live-money trading system that has to earn every lane it runs: 17 logged risk gates, books reconciled to the exchange every night, and its own detection-and-response stack.
+> A trading robot that trades real money on its own, around the clock. Every trade passes 17 safety checks, the books are checked against the exchange every night, and its own security team-in-a-box watches it while nobody is awake.
 
 🌐 **Live demo:** [tbot.trade/demo](https://tbot.trade/demo)
 🛡️ **Security operations:** [github.com/kenmwara/tbot-security](https://github.com/kenmwara/tbot-security)
