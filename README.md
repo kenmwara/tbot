@@ -15,23 +15,13 @@
 
 ## Screenshots
 
-<p>
-  <a href="https://tbot.trade/demo"><img src="https://tbot.trade/portfolio/img/tbot-demo-card.png?v=2" width="400" alt="tbot.trade/demo: the real T BOT operator dashboard running on synthetic data"></a>
-  &nbsp;&nbsp;
-  <img src="https://tbot.trade/portfolio/img/tbot-soar.jpg" width="400" alt="ops.tbot.trade/soar in demo mode: the security console with verdict, posture tiles, incident timeline and event feed">
-</p>
+<a href="https://tbot.trade/demo"><img src="images/tbot-screens.png" width="100%" alt="The operator dashboard and the security console, with made-up demo data. The live dashboard can be tried at tbot.trade/demo. It runs the real code on invented numbers. Operator dashboard: The real dashboard, live at tbot.trade/demo. Security console: Verdict, health tiles, the incident timeline and the event feed."></a>
 
-*Left: the real operator dashboard, live at tbot.trade/demo on synthetic data. Right: the security console in its synthetic demo mode.*
-
-<p>
-  <a href="https://github.com/kenmwara/tbot-security"><img src="https://raw.githubusercontent.com/kenmwara/tbot-security/main/docs/soar-map.png" width="820" alt="SOAR attack map: 24 hours of traffic the server refused, by country, with the SSH, firewall, web and fail2ban split and the top network per country (real counts, no addresses)"></a>
-</p>
-
-*The console's attack map with real counts: 24 hours of traffic the server refused, by country. No addresses are shown, and countries come from an offline table on the server.*
+<a href="https://github.com/kenmwara/tbot-security"><img src="https://raw.githubusercontent.com/kenmwara/tbot-security/main/images/tsec-map.png" width="100%" alt="Where the blocked traffic came from, country by country, over 24 hours. Real counts of traffic the server turned away. Only countries, counts and network owners appear, never an address. Countries are looked up on the server itself, so no visitor's address is sent anywhere."></a>
 
 ## What this is
 
-T BOT trades on its own, around the clock, from one Ubuntu droplet. One rules-based strategy trades live; the method stays private.
+T BOT trades on its own, around the clock, from one rented cloud server (Ubuntu). One rules-based strategy trades live; the method stays private.
 
 It is built as a multi-lane platform: forex (OANDA), US equities (IBKR), crypto (Kraken) and longer-dated macro positions each have a working integration in the same engine and their own row on the dashboard. **A lane goes live only when its record, net of fees and AI spend, earns it**, so capital sits where the evidence is.
 
