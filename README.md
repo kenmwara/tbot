@@ -11,7 +11,7 @@
 
 ---
 
-<img src="images/flow.png" width="100%" alt="Flow diagram in five steps. 1: Market scan; Every few minutes the loop scans, researches and decides on the production droplet. 2: 17 risk gates; Every opening order passes 17 logged checks; each refusal is recorded with the gate's name. 3: Kill switch on the order path; A daily-loss halt and a cash guard sit on the one path every order takes. 4: Order to the exchange; The exchange's own record of fills and cash is the source of truth. 5: Books closed nightly; Rebuilt from the exchange and must close to its cash within $5. Guards: Before trading, nothing trades without passing the gates; Intrusion response, fills the bot never logged engage the kill switch; Delivery, every deploy passes tests, a secret scan and a red-team check.">
+<img src="images/flow.png" width="100%" alt="How it works, in five steps. 1. Look for a trade: Every few minutes it scans the market and decides what to do. 2. 17 safety checks: Every new trade must pass 17 checks; each 'no' is written down with its reason. 3. An off switch: Trading stops for the day after a set loss, or if cash runs low. 4. Place the order: The exchange's own record is the final word on what happened. 5. Check the books nightly: Every night the books are rebuilt and must match the exchange's cash within $5. Safeguards: Before trading: Nothing trades without passing the checks; If someone breaks in: A trade it didn't place stops trading automatically; Every update: Must pass tests and a security check before going live.">
 
 ## Screenshots
 
