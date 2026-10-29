@@ -1,4 +1,4 @@
-<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=f1a7530f" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
+<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=b79af56c" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
 
 # T BOT — autonomous trading platform
 
@@ -10,6 +10,8 @@
 🔒 **Operator-side bot:** private (strategy IP)
 
 ---
+
+<img src="images/flow.png" width="100%" alt="Flow diagram in five steps. 1: Market scan; Every few minutes the loop scans, researches and decides on the production droplet. 2: 17 risk gates; Every opening order passes 17 logged checks; each refusal is recorded with the gate's name. 3: Kill switch on the order path; A daily-loss halt and a cash guard sit on the one path every order takes. 4: Order to the exchange; The exchange's own record of fills and cash is the source of truth. 5: Books closed nightly; Rebuilt from the exchange and must close to its cash within $5. Guards: Before trading, nothing trades without passing the gates; Intrusion response, fills the bot never logged engage the kill switch; Delivery, every deploy passes tests, a secret scan and a red-team check.">
 
 ## Screenshots
 
