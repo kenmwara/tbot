@@ -1,4 +1,4 @@
-<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=0c4d71f0" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
+<!-- banner --><a href="https://github.com/kenmwara"><img src="https://raw.githubusercontent.com/kenmwara/kenmwara/main/assets/brand/card-tbot.png?v=f1a7530f" width="100%" alt="T BOT: An autonomous trading platform that has to earn every lane it runs, its books reconciled to the exchange every night. 17 logged risk gates."></a>
 
 # T BOT — autonomous trading platform
 
@@ -76,7 +76,7 @@ In August 2026 the droplet was destroyed with no snapshot. It was rebuilt from g
 - **Venues:** one exchange (live); OANDA, IBKR and Kraken integrations built into the same engine
 - **Delivery:** push to `main` → a CI gate (kill-switch tests, red-team self-check, secret scan) → deploy in about 40 seconds
 
-## What I'd build next
+## Planned enhancements
 
 1. **A calibrated ensemble of numeric models** graded on settlements, instead of a larger language model: the measured lever is prediction skill, not model size.
 2. **Market breadth**: more markets at capped size, so position size can grow without moving the price.
